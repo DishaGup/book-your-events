@@ -72,7 +72,6 @@ def register():
         return jsonify({'message': 'Username already exists!'}), 400
 
     hashed_password = scrypt.hash(password)
-
     new_user = User().create({
         'username': username,
         'password': hashed_password,
