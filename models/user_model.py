@@ -1,59 +1,157 @@
-#models.py
+from flask_pymongo import ObjectId
 
-from app import db
-import sys
-import os
+class User:
+    collection = 'users'
 
-# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from flask_mongoengine import MongoEngine
+    @classmethod
+    def create(cls, user_data):
+        from app import mongo
+       
+        user = {
+            'username': user_data['username'],
+            'user_status': user_data.get('user_status', True),
+            'email': user_data['email'],
+            'gender': user_data.get('gender', 'Other'),
+            'membership_type': user_data.get('membership_type', 'Regular'),
+            'bio': user_data.get('bio', ''),
+            'date_of_birth': user_data.get('date_of_birth'),
+            'location': user_data['location'],
+            'role': user_data.get('role', 'user'),
+        }
+        return mongo.db[cls.collection].insert_one(user)
+
+    @classmethod
+    def get_all(cls):
+        from app import mongo
+        return list(mongo.db[cls.collection].find())
+
+    @classmethod
+    def get_by_username(cls, username):
+        from app import mongo
+        return mongo.db[cls.collection].find_one({'username': username})
+
+    @classmethod
+    def update(cls, username, updates):
+        from app import mongo
+        mongo.db[cls.collection].update_one({'username': username}, {'$set': updates})
+
+    @classmethod
+    def delete(cls, username):
+        from app import mongo
+        mongo.db[cls.collection].delete_one({'username': username})
 
 
-class User(db.Document):
-    """
-    This class represents a user in the application.
+class Movie:
+    collection = 'movies'
 
-    Attributes:
-        username (str): The username of the user.
-        user_status (bool): The status of the user.
-        gender (str): The gender of the user.
-        membership_type (str): The membership type of the user.
-        bio (str): The bio of the user.
-        date_of_birth (datetime): The date of birth of the user.
-        location (str): The location of the user.
-    """
-    username = db.StringField(required=True, unique=True)
-    user_status = db.BooleanField(default=True)
-    gender = db.StringField(choices=['Male', 'Female', 'Other'])
-    membership_type = db.StringField(choices=['Regular', 'Premium', 'VIP'])
-    bio = db.StringField()
-    date_of_birth = db.DateTimeField()
-    location = db.StringField(required=True)
+    @classmethod
+    def create(cls, movie_data):
+        from app import mongo
+        return mongo.db[cls.collection].insert_one(movie_data)
 
-class Movie(db.Document):
-    title = db.StringField(required=True)
-    rating = db.DecimalField()
-    description = db.StringField(required=True)
-    genre = db.StringField()
-    duration = db.StringField()
-    cast = db.ListField(db.StringField())
+    @classmethod
+    def get_all(cls):
+        from app import mongo
+        return list(mongo.db[cls.collection].find())
 
-class Show(db.Document):
-    movie = db.ReferenceField(Movie, required=True, reverse_delete_rule=db.CASCADE)
-    timings = db.ListField(db.DateTimeField())
-    categories = db.ListField(db.StringField())
-    location = db.StringField()
+    @classmethod
+    def get_by_title(cls, title):
+        from app import mongo
+        return mongo.db[cls.collection].find_one({'title': title})
 
-class Event(db.Document):
-    name = db.StringField(required=True)
-    date = db.DateTimeField(required=True)
-    participants = db.ListField(db.ReferenceField('Participant'))
-    ticket_price = db.DecimalField()
-    venue = db.StringField()
-    description = db.StringField()
+    @classmethod
+    def update(cls, title, updates):
+        from app import mongo
+        mongo.db[cls.collection].update_one({'title': title}, {'$set': updates})
 
-class Participant(db.Document):
-    name = db.StringField(required=True)
-    events = db.ListField(db.ReferenceField(Event))
-    email = db.EmailField()
-    phoneno = db.StringField()
-    address = db.StringField()
+    @classmethod
+    def delete(cls, title):
+        from app import mongo
+        mongo.db[cls.collection].delete_one({'title': title})
+
+
+class Show:
+    collection = 'shows'
+
+    @classmethod
+    def create(cls, show_data):
+        from app import mongo
+        return mongo.db[cls.collection].insert_one(show_data)
+
+    @classmethod
+    def get_all(cls):
+        from app import mongo
+        return list(mongo.db[cls.collection].find())
+
+    @classmethod
+    def get_by_movie(cls, movie):
+        from app import mongo
+        return list(mongo.db[cls.collection].find({'movie': movie}))
+
+    @classmethod
+    def update(cls, show_id, updates):
+        from app import mongo
+        mongo.db[cls.collection].update_one({'_id': ObjectId(show_id)}, {'$set': updates})
+
+    @classmethod
+    def delete(cls, show_id):
+        from app import mongo
+        mongo.db[cls.collection].delete_one({'_id': ObjectId(show_id)})
+
+
+class Event:
+    collection = 'events'
+
+    @classmethod
+    def create(cls, event_data):
+        from app import mongo
+        return mongo.db[cls.collection].insert_one(event_data)
+
+    @classmethod
+    def get_all(cls):
+        from app import mongo
+        return list(mongo.db[cls.collection].find())
+
+    @classmethod
+    def get_by_name(cls, name):
+        from app import mongo
+        return mongo.db[cls.collection].find_one({'name': name})
+
+    @classmethod
+    def update(cls, event_id, updates):
+        from app import mongo
+        mongo.db[cls.collection].update_one({'_id': ObjectId(event_id)}, {'$set': updates})
+
+    @classmethod
+    def delete(cls, event_id):
+        from app import mongo
+        mongo.db[cls.collection].delete_one({'_id': ObjectId(event_id)})
+
+
+class Participant:
+    collection = 'participants'
+
+    @classmethod
+    def create(cls, participant_data):
+        from app import mongo
+        return mongo.db[cls.collection].insert_one(participant_data)
+
+    @classmethod
+    def get_all(cls):
+        from app import mongo
+        return list(mongo.db[cls.collection].find())
+
+    @classmethod
+    def get_by_name(cls, name):
+        from app import mongo
+        return mongo.db[cls.collection].find_one({'name': name})
+
+    @classmethod
+    def update(cls, participant_id, updates):
+        from app import mongo
+        mongo.db[cls.collection].update_one({'_id': ObjectId(participant_id)}, {'$set': updates})
+
+    @classmethod
+    def delete(cls, participant_id):
+        from app import mongo
+        mongo.db[cls.collection].delete_one({'_id': ObjectId(participant_id)})
