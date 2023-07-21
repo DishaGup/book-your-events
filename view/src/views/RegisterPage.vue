@@ -41,32 +41,33 @@
     },
     methods: {
       async registerUser() {
-        try {
-          const response = await fetch('http://localhost:5050/api/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.userData),
-          });
+        console.log(this.userData)
+        // try {
+        //   const response = await fetch('http://localhost:5000/api/register', {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(this.userData),
+        //   });
   
-          if (response.ok) {
-            alert('User registered successfully!');
-            this.userData = {
-              username: '',
-              email: '',
-              password: '',
-              role: '',
-            };
-            this.errorMessage = '';
-          } else {
-            const data = await response.json();
-            this.errorMessage = data.message || 'Failed to register user.';
-          }
-        } catch (error) {
-          console.error('Error registering user:', error);
-          this.errorMessage = 'An error occurred while registering the user.';
-        }
+        //   if (response.ok) {
+        //     alert('User registered successfully!');
+        //     this.userData = {
+        //       username: '',
+        //       email: '',
+        //       password: '',
+        //       role: '',
+        //     };
+        //     this.errorMessage = '';
+        //   } else {
+        //     const data = await response.json();
+        //     this.errorMessage = data.message || 'Failed to register user.';
+        //   }
+        // } catch (error) {
+        //   console.error('Error registering user:', error);
+        //   this.errorMessage = 'An error occurred while registering the user.';
+        // }
       },
     },
   };

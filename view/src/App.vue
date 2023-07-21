@@ -1,21 +1,17 @@
+<!-- src/App.vue -->
 <template>
   <div id="app">
-    <UserRegistration />
+    <Navbar />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import UserRegistration from './components/UserRegistration.vue';
+import Navbar from './components/NavbarMenu.vue';
 
 export default {
   components: {
-    UserRegistration,
+    Navbar,
   },
 };
 </script>
-
-<style>
-#app {
-  padding: 20px;
-}
-</style>

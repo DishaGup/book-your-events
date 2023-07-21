@@ -17,6 +17,7 @@ class User:
             'date_of_birth': user_data.get('date_of_birth'),
             'location': user_data['location'],
             'role': user_data.get('role', 'user'),
+             'password' :user_data.get('password')
         }
         return mongo.db[cls.collection].insert_one(user)
 

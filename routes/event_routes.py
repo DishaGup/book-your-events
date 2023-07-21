@@ -1,5 +1,4 @@
-
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session, redirect, url_for
 from models.user_model import Event
 
 
@@ -13,10 +12,33 @@ def get_events():
 @events_bp.route('/api/events', methods=['POST'])
 def create_event():
     data = request.get_json()
+    eventName =data.get("eventName")
+    eventDate =data.get("eventDate")
+    
     # Create a new Event instance
     event = Event().create(data)
 
     return jsonify(event), 201
+
+@events_bp.route('/api/events', methods=['POST'])
+def create_event():
+    # Check if the user is logged in
+    if 'username' not in session:
+        return jsonify({'message': 'Unauthorized'}), 401
+
+    # Check if the user is an admin
+    if session['role'] != 'admin':
+        return jsonify({'message': 'Unauthorized - Admin access required'}), 403
+
+    data = request.get_json()
+    # Create a new Event instance
+    event = Event(**data)
+    event.save()
+
+    return jsonify(event), 201
+
+
+
 
 @events_bp.route('/api/events/<event_id>', methods=['GET'])
 def get_event(event_id):
