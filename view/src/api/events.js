@@ -1,11 +1,16 @@
-import axios from 'axios';
+
+// api/events.js
+import axios from "axios";
 
 // Fetch all events
-export const fetchEvents = () => {
-  return axios.get('/events');
+export const fetchEventsAPI = () => {
+  return axios.get("http://localhost:5000/api/events");
 };
 
-// Make a POST request to participate in an event
-export const participateEvent = (eventId) => {
-  return axios.post(`/events/${eventId}/participate`);
+export const participateEventAPI = (eventId,participantDetails) => {
+  return axios.post(`http://localhost:5000/api/events/book`, { eventId ,participantDetails });
+};
+
+export const createEventAPI = (eventDetails, config) => {
+  return axios.post(`http://localhost:5000/api/events`, eventDetails, config);
 };

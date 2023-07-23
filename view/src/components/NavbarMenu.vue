@@ -15,6 +15,15 @@
 <script>
 export default {
   name: 'NavbarMenu',
+  computed: {
+    isAdmin() {
+      // Access the isAdmin property from the Vuex store state
+      const user = this.$store.state.user;
+      // Check if the user is logged in and has the "role" key equal to "admin"
+     
+      return user && user.user_data.role === 'admin';
+    },
+  },
   methods: {
     navigateTo(route) {
       this.$router.push(route);

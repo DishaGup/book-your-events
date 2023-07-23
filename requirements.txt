@@ -15,3 +15,4 @@ flask_cors==3.0.10
 flask_pymongo==2.3.0
 PyJWT==2.8.0
 passlib==1.7.4
+python-dateutil==2.8.2

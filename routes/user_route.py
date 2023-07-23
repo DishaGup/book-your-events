@@ -67,13 +67,14 @@ def login():
 
     # Convert the ObjectId to a string before encoding it in the token
     user_data['_id'] = str(user_data['_id'])
+    payload = {'username': user_data.get('username')}  # Or user_data['username']
 
     # Encode the user_data dictionary directly in the token
     token = jwt.encode(
         {'user_data': user_data, 'exp': datetime.datetime.utcnow() +
          datetime.timedelta(hours=1)},
         current_app.config['SECRET_KEY'], algorithm='HS256')
-    return jsonify({'token': token}), 200
+    return jsonify({'token': token,"user_data":user_data}), 200
 
 
 # Admin routes

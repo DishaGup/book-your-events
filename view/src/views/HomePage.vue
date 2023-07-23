@@ -1,45 +1,60 @@
-<!-- src/views/HomePage.vue -->
 <template>
   <div>
-    <h1>Home Page</h1>
-    <div v-if="movies.length > 0">
-      <div v-for="movie in movies" :key="movie._id">
-        <MovieCard :movie="movie" />
+    <CarouselHomePage :images="images"></CarouselHomePage>
+    <div>
+      <div>
+        <MovieRow title="Top Movies" :movies="topMovies" />
       </div>
-    </div>
-    <div v-else>
-      <p>No movies found.</p>
-    </div>
-
-    <div v-if="shows.length > 0">
-      <div v-for="show in shows" :key="show._id">
-        <ShowCard :show="show" />
-      </div>
-    </div>
-    <div v-else>
-      <p>No shows found.</p>
+      <MovieRow title="Other Movies" :movies="otherMovies" />
     </div>
   </div>
 </template>
 
 <script>
-import MovieCard from '@/components/MovieCard.vue';
-import ShowCard from '@/components/ShowCard.vue';
+import MovieRow from '@/components/MovieRow.vue';
+import CarouselHomePage from '@/components/HomePage/CarouselHomePage.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
-    MovieCard,
-    ShowCard,
+    MovieRow,
+    CarouselHomePage,
+  },
+  computed: {
+    ...mapState(['Allmovies']),
+    topMovies() {
+      const allMovies = this.Allmovies;
+      return allMovies ? allMovies.filter((movie) => movie.rating >= 8) : [];
+    },
+    otherMovies() {
+      const allMovies = this.Allmovies;
+      return allMovies ? allMovies.filter((movie) => movie.rating < 8) : [];
+    },
   },
   data() {
     return {
-      movies: [], // Store the movies data fetched from the backend
-      shows: [], // Store the shows data fetched from the backend
+      images: [
+        {
+          id: 0,
+          src: 'https://assets-in.bmscdn.com/promotions/cms/creatives/1687328911358_webbannernpa.jpg',
+        },
+        {
+          id: 1,
+          src: 'https://assets-in.bmscdn.com/promotions/cms/creatives/1689834634562_sunburngoadesktop.jpg',
+        },
+        {
+          id: 2,
+          src: 'https://assets-in.bmscdn.com/promotions/cms/creatives/1689317595041_gauravguptaliivedesktop.jpg',
+        },
+        {
+          id: 3,
+          src: 'https://assets-in.bmscdn.com/promotions/cms/creatives/1688970894022_bigweb.jpg',
+        },
+      ],
     };
   },
   mounted() {
-    // Fetch movies and shows data from the backend using API calls (e.g., Axios)
-    // and update the movies and shows arrays
+    this.$store.dispatch('fetchAllMovie');
   },
 };
 </script>

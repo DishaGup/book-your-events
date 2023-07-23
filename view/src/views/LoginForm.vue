@@ -16,40 +16,34 @@
         </div>
       </form>
     </div>
+     New User? <router-link :to="'/register'">Create an Account</router-link>
   </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-      };
-    },
-    methods: {
-      async login() {
-        try {
-          const response = await axios.post('/api/login', {
-            username: this.username,
-            password: this.password,
-          });
-          const token = response.data.token;
-  
-          // Save the token to local storage or use a state management library like Vuex
-          localStorage.setItem('token', token);
-  
-          // Redirect to the dashboard or another page
-          // For demonstration purposes, let's simply log in the console
+<script>
+export default {
+  data() {
+    return {
+      username: '',
+      password: '',
+    };
+  },
+  methods: {
+    login() {
+      const { username, password } = this;
+      this.$store.dispatch('login', { username, password })
+        .then(() => {
           console.log('Logged in successfully!');
-  
-          // You can use Vue Router to navigate to another page if needed
-        } catch (error) {
-          console.error('Login failed:', error.response.data.message);
-        }
-      },
+          if (this.$route.meta.fromHistory) {
+            // Redirect to the previous page in the browser history
+            this.$router.go(-1);
+          } else {
+            // Otherwise, redirect to the dashboard page
+            this.$router.push('/');
+          }   
+        })
+        .catch((error) => {
+          console.error('Login failed:', error.message);
+        });
     },
-  };
-  </script>
-  
+  },
+};
+</script>

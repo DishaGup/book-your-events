@@ -36,3 +36,16 @@ def delete_participant(participant_id):
     participant = Participant().get_by_id(participant_id)
     participant.delete()
     return jsonify(message='Participant deleted'), 200
+
+@participants_bp.route('/api/participants/book/<participant_id>/<show_id>', methods=['POST'])
+def book_show(participant_id, show_id):
+    show = Show.get_by_id(show_id)
+    if not show:
+        return jsonify({"message": "Show not found"}), 404
+
+    participant = Participant.get_by_id(participant_id)
+    if not participant:
+        return jsonify({"message": "Participant not found"}), 404
+
+    participant.book_show(show_id)
+    return jsonify({"message": "Show booked successfully"}), 200

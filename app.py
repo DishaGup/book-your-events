@@ -9,7 +9,7 @@ from routes.participant_routes import participants_bp
 from routes.show_routes import shows_bp
 from routes.user_route import users_bp
 from flask_pymongo import PyMongo
-
+from models.user_model import Event
 
 load_dotenv()
 
@@ -28,7 +28,7 @@ app.config['MONGO_URI'] = MONGODB_URL
 
 
 mongo = PyMongo(app)
-
+db = mongo.db
 
 app.register_blueprint(users_bp)
 app.register_blueprint(events_bp)

@@ -1,5 +1,11 @@
 export default {
-    events: [], // Initial state for events
+    Allevents: [], // Initial state for events
     user: null, // Initial state for user data
+    movies:[],
+    Allmovies:[],
+    bookedevents:[],
+    singlemovie:null,
+    shows: [],
+
   };
   

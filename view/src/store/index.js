@@ -1,16 +1,12 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+
+import { createStore } from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
+import state from './state';
 
-Vue.use(Vuex);
 
-const state = {
-  events: [], // Initial state for events
-};
-
-export default new Vuex.Store({
-  state,
+export default createStore({
+   state,
   actions,
   mutations,
 });
