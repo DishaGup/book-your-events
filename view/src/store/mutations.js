@@ -26,4 +26,18 @@ export default {
   setShows(state, shows) {
     state.shows = shows;
   },
+  setBookedMovies(state,bookedmovies){
+    state.bookedmovies=bookedmovies
+  },
+
+    setNewShowTimings(state, timings) {
+    state.newShowTimings = timings;
+  },
+
+  addNewShowTiming(state, timing) {
+    state.newShowTimings.push(timing);
+  },
+  removeNewShowTiming(state, index) {
+    state.newShowTimings.splice(index, 1);
+  },
 };

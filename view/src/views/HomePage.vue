@@ -1,11 +1,11 @@
 <template>
   <div>
-    <CarouselHomePage :images="images"></CarouselHomePage>
+    <CarouselHomePage  v-if="false" :images="images"></CarouselHomePage>
     <div>
       <div>
-        <MovieRow title="Top Movies" :movies="topMovies" />
+        <MovieRow v-if="false" title="Top Movies" :movies="topMovies" />
       </div>
-      <MovieRow title="Other Movies" :movies="otherMovies" />
+      <MovieRow v-if="false" title="Other Movies" :movies="otherMovies" />
     </div>
   </div>
 </template>

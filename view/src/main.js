@@ -1,6 +1,7 @@
 import {createApp} from 'vue';
 import App from './App.vue';
 import axios from 'axios';
+import "./global.css"
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from './views/HomePage.vue';
 import Events from './views/EventPage.vue';

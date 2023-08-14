@@ -81,14 +81,21 @@ export default {
     registerUser() {
       // Rest of the method remains the same
       // ...
-      this.$store.dispatch('registerUser', this.userData)
+     // const {userData} =this
+      this.$store.dispatch('registerUser',{ userData: this.userData })
         .then(() => {
           console.log('User registered successfully!');
           this.userData = {
             username: '',
-            email: '',
-            password: '',
-            role: '',
+        email: '',
+        password: '',
+        role: 'user', // Default role is set to 'user'
+        user_status: true,
+        gender: 'Other',
+        membership_type: 'general',
+        bio: '',
+        date_of_birth: '',
+        location: '',
           };
           this.errorMessage = '';
         })

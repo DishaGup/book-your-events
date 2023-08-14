@@ -42,12 +42,10 @@ class User:
         mongo.db[cls.collection].delete_one({'username': username})
 
 
-
 class Show:
     collection = 'shows'
    
     @classmethod
-
     def create(cls, show_data):
         from app import mongo
         # Extract the movie title from the show data
@@ -80,32 +78,31 @@ class Movie:
     collection = 'movies'
      
     @classmethod
-    
     def create(cls, movie_data):
         from app import mongo
         result = mongo.db[cls.collection].insert_one(movie_data)
-        return
-        
+        movie_data['_id'] = result.inserted_id
+        return movie_data
 
     @classmethod
     def get_all(cls):
         from app import mongo
         return list(mongo.db[cls.collection].find())
     
-
+    @classmethod
+    def get_by_id(cls, movie_id):
+        from app import mongo
+        return mongo.db[cls.collection].find_one({'_id': ObjectId(movie_id)})
+    
     @classmethod
     def add_show(cls, movie_id, show_id):
         from app import mongo
-        mongo.db[cls.collection].update_one(
-            {'_id': ObjectId(movie_id)},
-            {'$push': {'shows': ObjectId(show_id)}}
-     )
-
-    @classmethod
-    def get_by_id(cls, event_id):
-        from app import mongo
-        return mongo.db[cls.collection].find_one({'_id': ObjectId(event_id)})
-
+        movie = cls.get_by_id(movie_id)
+        if movie:
+            shows = movie.get('shows', [])
+            shows.append(ObjectId(show_id))
+            mongo.db[cls.collection].update_one({'_id': ObjectId(movie_id)}, {'$set': {'shows': shows}})
+    
     @classmethod
     def get_by_title(cls, title):
         from app import mongo

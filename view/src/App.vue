@@ -1,9 +1,11 @@
 <!-- src/App.vue -->
 <template>
-  <div id="app">
-    <Navbar />
-    <router-view></router-view>
-  </div>
+  <body id="app">
+  
+<Navbar />
+<router-view></router-view>
+
+  </body>
 </template>
 
 <script>
@@ -15,3 +17,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+body { background: var(--eerie-black); }
+
+body.active { overflow: hidden; }
+
+</style>

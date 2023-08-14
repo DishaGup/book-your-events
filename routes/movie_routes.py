@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify, request
 from models.user_model import Movie,Show
 from dateutil.parser import parse
+from bson import ObjectId
 movies_bp = Blueprint('movies', __name__)
 
 # Movie routes
@@ -87,12 +88,44 @@ def delete_movie(movie_id):
 @movies_bp.route('/api/movies/<movie_id>/shows', methods=['GET'])
 def get_movie_shows(movie_id):
     shows = Show.get_by_movie(movie_id)
+    for show in shows:
+        show["_id"] = str(show["_id"])
     return jsonify(shows), 200
+# In the movies_bp blueprint
+
 
 @movies_bp.route('/api/movies/<movie_id>/shows', methods=['POST'])
-def create_show(movie_id):
+def create_show_for_movie(movie_id):
     data = request.get_json()
-    data['movie'] = movie_id  # Associate the show with the movie
+   
+    # Check if data is   dictionary
+    if not isinstance(data, dict):
+        return jsonify({"message": "Invalid data format. Expecting a JSON object."}), 400
 
+    data['movie'] = movie_id  # Associate the show with the movie
+    movie = Movie.get_by_id({'_id': ObjectId(movie_id)})
+
+    if not movie:
+        return jsonify({"message": "Movie not found"}), 404
+    print(movie)
+    # Assuming the timings data is provided in the request JSON as a list
+    timings = data.get('timings', [])
+    if not timings:
+        return jsonify({"message": "Timings data is missing"}), 400
+    print(f"timmings", timings)
+    # Convert the string timings to datetime objects
+    for timing in timings:
+        try:
+            timing['startTime'] = parse(timing['startTime'])
+            timing['endTime'] = parse(timing['endTime'])
+        except ValueError:
+            return jsonify({"message": "Invalid timing format. Please use YYYY-MM-DDTHH:mm"}), 400
+
+    # Save the show with the associated timings to the database
     show = Show.create(data)
+
     return jsonify(show), 201
+
+# Note: We've renamed the function to `create_show_for_movie` to avoid conflict with the `create_show` endpoint in the shows_bp blueprint.
+
+# In the shows_bp blueprint

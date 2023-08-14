@@ -21,7 +21,7 @@ def register():
     # Check if all required fields are present in user_data
     for field in required_fields:
         if field not in data:
-            return jsonify({"message": f"Required field '{field}' is missing in user_data"})
+            return jsonify({"message": f"Required field '{field}' is missing in user_data"}),400
 
     username = data.get('username')
     password = data.get('password')

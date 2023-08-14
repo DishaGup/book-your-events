@@ -45,6 +45,14 @@ def get_movie_shows(movie_id):
     return jsonify(shows), 200
 
 
+# @shows_bp.route('/api/shows', methods=['POST'])
+# def create_show():
+#     data = request.get_json()
+#     # Create a new Show instance
+#     show = Show().create(data)
+
+#     return jsonify(show), 201
+
 # @shows_bp.route('/api/book_show', methods=['POST'])
 # def book_show():
 #     data = request.get_json()
